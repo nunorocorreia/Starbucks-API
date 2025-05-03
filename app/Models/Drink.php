@@ -9,4 +9,11 @@ class Drink extends Model
 {
     /** @use HasFactory<\Database\Factories\DrinkFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'description',
+        'price',
+        'image_url',
+    ];
 }
