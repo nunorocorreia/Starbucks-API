@@ -41,4 +41,12 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
         });
     }
+
+    /**
+     * Register the service provider.
+     */
+    public function register(): void
+    {
+        parent::register();
+    }
 }
