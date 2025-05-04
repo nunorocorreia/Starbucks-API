@@ -23,18 +23,21 @@ class DrinkResource extends JsonResource
                 'price' => $this->price,
                 'stock' => $this->stock,
             ],
-            'relationships' => [
-                'category' => [
-                    'data' => [
-                        'type' => 'category',
-                        'id' => $this->id_category,
-                        'name' => $this->category->name,
+            'relationships' => $this->when(
+                $request->routeIs('drinks.*'),
+                [
+                    'category' => [
+                        'data' => [
+                            'type' => 'category',
+                            'id' => $this->id_category,
+                            'name' => $this->category->name,
+                        ],
+                    ],
+                    'links' => [
+                        'self' => route('categories.show', ['category' => $this->id_category]),
                     ],
                 ],
-                'links' => [
-                    'self' => 'todo',
-                ],
-            ],
+            ),
             'links' => [
                 'self' => route('drinks.show', ['drink' => $this->id]),
             ],

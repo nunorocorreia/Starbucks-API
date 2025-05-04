@@ -89,6 +89,9 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'name' => 'Tea',
+            ],
+            [
+                'name' => 'Extras',
             ]
         ]);
 
