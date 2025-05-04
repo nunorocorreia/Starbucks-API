@@ -1,69 +1,16 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Starbucks Inventory Management API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
-
-## About Laravel
-
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
-## API Documentation
+A REST API for managing a Starbucks coffee shop inventory system.
 
 ### Base URL
 `/api/v1`
+
+### Overview
+This API allows you to:
+- Manage drink categories, products, and extras
+- Check product availability
+- Place orders with customizable extras
+- Process payments and calculate change
 
 ### Available Endpoints
 
@@ -72,6 +19,9 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
   - Optional query parameter: `include=drinks` to include drinks in response
 - **GET** `/categories/{id}` - Get a specific category by ID
   - Optional query parameter: `include=drinks` to include drinks in response
+- **POST** `/categories` - Create a new category
+- **PUT** `/categories/{id}` - Update a category
+- **DELETE** `/categories/{id}` - Delete a category
 
 #### Drinks
 - **GET** `/drinks` - Get all drinks (paginated)
@@ -80,6 +30,26 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
   - Sorting:
     - Supports sorting by: `name`, `price`, `stock`, `createdAt`, `updatedAt`
 - **GET** `/drinks/{id}` - Get a specific drink by ID
+- **POST** `/drinks` - Create a new drink
+- **PUT** `/drinks/{id}` - Update a drink
+- **DELETE** `/drinks/{id}` - Delete a drink
+
+#### Extras
+- **GET** `/extras` - Get all available extras
+- **GET** `/extras/{id}` - Get a specific extra by ID
+- **POST** `/extras` - Create a new extra
+- **PUT** `/extras/{id}` - Update an extra
+- **DELETE** `/extras/{id}` - Delete an extra
+
+#### Orders
+- **POST** `/orders` - Place a new order
+  - Required fields:
+    - `drink_id` - ID of the drink being ordered
+    - `extras` - Array of extra IDs to add to the drink (optional)
+    - `payment_amount` - Amount of money provided by the customer
+  - Returns:
+    - Order confirmation with total price and change
+    - Error message if payment insufficient or drink out of stock
 
 ### Response Format
 Responses follow a JSON API-like specification:
@@ -126,3 +96,74 @@ Responses follow a JSON API-like specification:
   }
 }
 ```
+
+#### Extra Response Example
+```json
+{
+  "type": "extra",
+  "id": 1,
+  "attributes": {
+    "name": "Whipped Cream",
+    "price": 0.50
+  },
+  "links": {
+    "self": "/api/v1/extras/1"
+  }
+}
+```
+
+#### Order Response Example
+```json
+{
+  "type": "order",
+  "id": 1,
+  "attributes": {
+    "drink": {
+      "id": 1,
+      "name": "Latte",
+      "price": 4.99
+    },
+    "extras": [
+      {
+        "id": 1,
+        "name": "Whipped Cream",
+        "price": 0.50
+      },
+      {
+        "id": 3,
+        "name": "Syrup",
+        "price": 0.75
+      }
+    ],
+    "total_price": 6.24,
+    "payment_amount": 10.00,
+    "change": 3.76,
+    "status": "completed"
+  },
+  "links": {
+    "self": "/api/v1/orders/1"
+  }
+}
+```
+
+#### Error Response Example
+```json
+{
+  "error": {
+    "code": 400,
+    "message": "Insufficient funds. Required: €6.24, Provided: €5.00"
+  }
+}
+```
+
+### Example Use Cases
+
+1. **Browse Menu**:
+   - GET `/api/v1/categories?include=drinks` to view all categories with their drinks
+
+2. **Order a Customized Drink**:
+   - GET `/api/v1/extras` to see available extras
+   - POST `/api/v1/orders` with drink_id, extras array, and payment_amount
+
+3. **Check Stock**:
+   - GET `/api/v1/drinks/{id}` to see if a specific drink is in stock before ordering
