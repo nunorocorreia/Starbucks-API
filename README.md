@@ -59,3 +59,70 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## API Documentation
+
+### Base URL
+`/api/v1`
+
+### Available Endpoints
+
+#### Categories
+- **GET** `/categories` - Get all categories
+  - Optional query parameter: `include=drinks` to include drinks in response
+- **GET** `/categories/{id}` - Get a specific category by ID
+  - Optional query parameter: `include=drinks` to include drinks in response
+
+#### Drinks
+- **GET** `/drinks` - Get all drinks (paginated)
+  - Filters:
+    - `name` - Filter by drink name (supports wildcard `*`)
+  - Sorting:
+    - Supports sorting by: `name`, `price`, `stock`, `createdAt`, `updatedAt`
+- **GET** `/drinks/{id}` - Get a specific drink by ID
+
+### Response Format
+Responses follow a JSON API-like specification:
+
+#### Category Response Example
+```json
+{
+  "type": "category",
+  "id": 1,
+  "attributes": {
+    "name": "Coffee"
+  },
+  "includes": [...],  // When drinks are included
+  "links": {
+    "self": "/api/v1/categories/1"
+  }
+}
+```
+
+#### Drink Response Example
+```json
+{
+  "type": "drink",
+  "id": 1,
+  "attributes": {
+    "name": "Latte",
+    "price": 4.99,
+    "stock": 100
+  },
+  "relationships": {
+    "category": {
+      "data": {
+        "type": "category",
+        "id": 1,
+        "name": "Coffee"
+      }
+    },
+    "links": {
+      "self": "/api/v1/categories/1"
+    }
+  },
+  "links": {
+    "self": "/api/v1/drinks/1"
+  }
+}
+```
