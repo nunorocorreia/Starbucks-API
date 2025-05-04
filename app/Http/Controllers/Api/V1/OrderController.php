@@ -3,32 +3,35 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Filters\Api\V1\DrinksFilter;
-use App\Http\Requests\Api\V1\StoreOrderRequest;
-use App\Http\Resources\Api\V1\DrinkResource;
-use App\Models\Drink;
+use App\Http\Resources\Api\V1\OrderResource;
+use App\Models\Order;
 use App\Traits\ApiResponses;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use PHPUnit\Framework\Attributes\Ticket;
 
-class DrinkController extends Controller
+class OrderController extends Controller
 {
     use ApiResponses;
-
     /**
      * Display a listing of the resource.
      */
-    public function index(DrinksFilter $filters)
+    public function index()
     {
-        return DrinkResource::collection(Drink::filter($filters)->paginate());
+        //
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreOrderRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -36,20 +39,21 @@ class DrinkController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $idDrink)
+    public function show(int $idOrder)
     {
         try {
-            $drink = Drink::findOrFail($idDrink);
-            return new DrinkResource($drink);
+            $order = Order::findOrFail($idOrder);
+            return new OrderResource($order);
         } catch (ModelNotFoundException) {
-            return $this->error('Drink not found', 404);
+            return $this->error('Order not found', 404);
         }
     }
+
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Drink $drink)
+    public function edit(Order $order)
     {
         //
     }
@@ -57,7 +61,7 @@ class DrinkController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Drink $drink)
+    public function update(Request $request, Order $order)
     {
         //
     }
@@ -65,7 +69,7 @@ class DrinkController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Drink $drink)
+    public function destroy(Order $order)
     {
         //
     }

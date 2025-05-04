@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\DrinkController;
+use App\Http\Controllers\Api\V1\OrderController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -18,5 +19,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('drinks', DrinkController::class);
 Route::apiResource('categories', CategoryController::class);
+Route::apiResource('orders', OrderController::class);
 
 
