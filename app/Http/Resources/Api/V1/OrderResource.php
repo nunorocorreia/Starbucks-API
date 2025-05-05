@@ -35,7 +35,7 @@ class OrderResource extends JsonResource
                         ],
                     ],
                     'links' => [
-                        'self' => route('drinks.show', ['drink' => $this->id_drink]),
+                        'self' => !route('drinks.show', ['drink' => $this->id_drink]),
                     ],
                 ],
                 'extras' => [
