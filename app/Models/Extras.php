@@ -9,4 +9,6 @@ class Extras extends Model
 {
     /** @use HasFactory<\Database\Factories\ExtrasFactory> */
     use HasFactory;
+
+
 }

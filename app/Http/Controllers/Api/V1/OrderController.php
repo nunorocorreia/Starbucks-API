@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\StoreOrderRequest;
 use App\Http\Resources\Api\V1\OrderResource;
+use App\Models\Drink;
+use App\Models\Extras;
 use App\Models\Order;
+use App\Models\OrderExtras;
 use App\Traits\ApiResponses;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -12,6 +16,7 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     use ApiResponses;
+
     /**
      * Display a listing of the resource.
      */
@@ -31,9 +36,37 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreOrderRequest $request)
     {
-        //
+        try {
+            $idDrink = $request->input('data.relationships.drinks.data.id');
+            $idExtras = $request->input('data.relationships.extras.data.*.id');
+            $drink = Drink::findOrFail($idDrink);
+            $extras = Extras::whereIn('id', $idExtras)->get();
+
+            $total = $drink->price + $extras->sum('price');
+            if ($total >= $request->input('data.attributes.amount')) {
+                return $this->error('The amount is not enough, total: ' . $total, 422);
+            }
+
+            $order = Order::create([
+                'id_drink' => $idDrink,
+                'price' => $total,
+                'amount_given' => $request->input('data.attributes.amount'),
+                'change' => $request->input('data.attributes.amount') - $total,
+            ]);
+
+            foreach ($idExtras as $extraId) {
+                OrderExtras::create([
+                    'id_order' => $order->id,
+                    'id_extra' => $extraId
+                ]);
+            }
+        } catch (ModelNotFoundException $e) {
+            return $this->error($e->getMessage(), 404);
+        }
+
+        return new OrderResource($order);
     }
 
     /**

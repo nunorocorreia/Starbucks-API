@@ -16,9 +16,8 @@ class Order extends Model
     protected $table = 'orders';
     protected $fillable = [
         'id_drink',
-        'id_extras',
         'price',
-        'amount-given',
+        'amount_given',
         'change',
     ];
 
