@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Filters\Api\V1\OrdersFilter;
 use App\Http\Requests\Api\V1\StoreOrderRequest;
 use App\Http\Resources\Api\V1\OrderResource;
 use App\Models\Drink;
@@ -20,9 +21,9 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(OrdersFilter $filters)
     {
-        //
+        return OrderResource::collection(Order::filter($filters)->paginate());
     }
 
     /**

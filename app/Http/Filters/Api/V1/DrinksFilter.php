@@ -7,7 +7,6 @@ class DrinksFilter extends QueryFilter
     protected $sortable = [
         'name',
         'price',
-        'stock',
         'createdAt' => 'created_at',
         'updatedAt' => 'updated_at'
     ];
