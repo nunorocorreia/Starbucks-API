@@ -49,12 +49,13 @@ class OrderController extends Controller
             if ($total >= $request->input('data.attributes.amount')) {
                 return $this->error('The amount is not enough, total: ' . $total, 422);
             }
+            $change = round($request->input('data.attributes.amount') - $total, 3); //round
 
             $order = Order::create([
                 'id_drink' => $idDrink,
                 'price' => $total,
                 'amount_given' => $request->input('data.attributes.amount'),
-                'change' => $request->input('data.attributes.amount') - $total,
+                'change' => $change,
             ]);
 
             foreach ($idExtras as $extraId) {
