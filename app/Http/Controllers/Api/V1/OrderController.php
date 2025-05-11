@@ -47,7 +47,12 @@ class OrderController extends Controller
 
             $total = $drink->price + $extras->sum('price');
             if ($total >= $request->input('data.attributes.amount')) {
-                return $this->error('The amount is not enough, total: ' . $total, 422);
+                return $this->error(
+                    'Insufficient funds. Required: €' . $total . ', Provided: €' . $request->input(
+                        'data.attributes.amount'
+                    ),
+                    422
+                );
             }
             $change = round($request->input('data.attributes.amount') - $total, 3); //round
 
